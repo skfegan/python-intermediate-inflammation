@@ -1,0 +1,29 @@
+name: CI
+
+# specify which github events trigger a CI build
+on: push
+
+# define a single job
+jobs:
+  build:
+    # specify OS
+    runs-on: ubuntu-latest
+
+    steps:
+    -name: checkout repository
+     uses: actions/checkout@v2
+
+    -name: set up python 3.9
+     uses: actions/setup-python@v2
+     with:
+       python-version: 3.9
+
+    -name: install dependencies
+     run: |
+       python3 -m pip install --upgrade pip
+       pip3 install -r requirements.txt
+       pip3 install -e .
+
+    -name: test with pytest
+     run: |
+       pytest --cov=inflammation.models tests/test_models.py
